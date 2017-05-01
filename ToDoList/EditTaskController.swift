@@ -1,40 +1,51 @@
 //
-//  CreateTask.swift
+//  EditTask.swift
 //  ToDoList
 //
-//  Created by Admin on 25.04.17.
+//  Created by Admin on 01.05.17.
 //  Copyright © 2017 Konevskiy. All rights reserved.
 //
-
 import UIKit
+import Foundation
 
-class CreateTaskViewController: UIViewController, UITextFieldDelegate {
-    @IBOutlet weak var doneButton: UIButton!
-    @IBOutlet weak var titleEdit: UITextField!
-    @IBOutlet weak var descriptionEdit: UITextField!
+class EditTaskController: UIViewController, UITextFieldDelegate {
     
+    @IBOutlet weak var titleEdit: UITextField!
+    
+    @IBOutlet weak var descriptionEdit: UITextField!
     var myLabelTitle = " "
     var myLabelDescription = " "
+    var myTask :Task = Task(myTitle: "", myDescription: "")
+    var selectIndex = -1
     
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        titleEdit.delegate = self
-        descriptionEdit.delegate = self
+    @IBAction func DeleteButtonClicked(_ sender: Any) {
+        tasks.remove(at : selectIndex)
+        self.navigationController?.popViewController(animated: true);
     }
-    
-    
     @IBAction func DoneButtonClicked(_ sender: Any) {
+        
         let newTask = Task(myTitle: titleEdit.text!, myDescription: descriptionEdit.text!)
-        tasks.append(newTask)
+        
+        tasks[selectIndex] = newTask
         self.navigationController?.popViewController(animated: true);
 
+        
+        
     }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        titleEdit.delegate = self
+        descriptionEdit.delegate = self
+        titleEdit.text = myTask.title
+        descriptionEdit.text = myTask.description
+        
+            }
     
     @IBAction func EndEditindTitle(_ sender: Any) {
         myLabelTitle = titleEdit.text!
     }
-
+    
     
     @IBAction func EndEditingDescription(_ sender: Any) {
         myLabelDescription = descriptionEdit.text!
@@ -43,6 +54,7 @@ class CreateTaskViewController: UIViewController, UITextFieldDelegate {
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
     
     public func textFieldShouldReturn(_ titleEdit: UITextField) -> Bool {
